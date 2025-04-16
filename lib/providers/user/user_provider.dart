@@ -29,9 +29,12 @@ class UserProvider extends StateNotifier<UserState> {
       state = UserState(user: response.data);
       return response;
     } on ErrorException catch (e) {
+      final isWrongCredentials = e.statusCode == 401;
       state = state.copyWith(
         isLoading: false,
-        errorMessage: e.message,
+        errorMessage: isWrongCredentials
+            ? "Benutzername oder Passwort ist falsch."
+            : e.message,
       );
       return null;
     } catch (_) {
@@ -43,12 +46,20 @@ class UserProvider extends StateNotifier<UserState> {
     }
   }
 
+  void clearError() {
+    state = state.copyWith(errorMessage: null);
+  }
+
   void logout() {
     _storage.clearUser();
     state = const UserState();
   }
 }
 
+
+
 final userProvider = StateNotifierProvider<UserProvider, UserState>(
   (ref) => UserProvider(),
 );
+
+

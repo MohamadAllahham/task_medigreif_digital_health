@@ -14,7 +14,6 @@ dependencies:
 
   intl: ^0.19.0 # internationalization and localization support (dates, numbers, messages, etc.)
 
-
   cupertino_icons: ^1.0.8 # iOS-style icons
   json_annotation: ^4.9.0 # annotations used with json_serializable for model generation
   flutter_riverpod: ^2.6.1 # modern, safe, and testable state management

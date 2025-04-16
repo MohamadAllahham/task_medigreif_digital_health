@@ -18,19 +18,39 @@ class ApiService {
     try {
       final url = Uri.parse('$_baseUrl$endpoint');
 
-      final res = await (method == 'POST'
-          ? http.post(url, headers: _headers, body:  json.encode(data))
+      final response = await (method == 'POST'
+          ? http.post(url, headers: _headers, body: json.encode(data))
           : http.get(url, headers: _headers))
           .timeout(_timeout);
 
-      final body = json.decode(res.body);
-      if (res.statusCode >= 200 && res.statusCode < 300) return body;
-      throw ErrorException(body['error'] ?? 'Unexpected error.');
+      final statusCode = response.statusCode;
+      final responseBody = response.body;
+
+      dynamic body;
+      try {
+        body = json.decode(responseBody);
+      } catch (_) {
+        throw ErrorException('Invalid server response.', statusCode: statusCode);
+      }
+
+      if (statusCode >= 200 && statusCode < 300) {
+        return body;
+      }
+
+      // Handle known error shape
+      final errorMessage = body is Map && body.containsKey('error')
+          ? body['error']
+          : 'Unexpected error.';
+
+      throw ErrorException(errorMessage, statusCode: statusCode);
     } on SocketException {
       throw ErrorException('No internet connection.');
     } on TimeoutException {
       throw ErrorException('Request timed out.');
-    } catch (_) {
+    } on ErrorException {
+      rethrow; // Keep your custom error with its message
+    } catch (e) {
+      // This is for any other unexpected errors
       throw ErrorException('Something went wrong.');
     }
   }

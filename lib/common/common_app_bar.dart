@@ -24,7 +24,10 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
     final colorScheme = theme.colorScheme;
 
     return ClipRRect(
-      borderRadius: BorderRadius.circular(withBorderRadius ? 16.0 : 0),
+      borderRadius: BorderRadius.only(
+        bottomLeft: Radius.circular(withBorderRadius ? 16.0 : 0),
+        bottomRight: Radius.circular(withBorderRadius ? 16.0 : 0),
+      ),
       child: AppBar(
         backgroundColor: colorScheme.surface,
         elevation: 0,
@@ -37,6 +40,7 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
+              borderRadius: BorderRadius.circular(4.0)
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,

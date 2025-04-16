@@ -53,5 +53,7 @@
   "moodSavedPart1": "Awesome! Your mood has been saved.\nKeep it up, you're making ",
   "moodSavedBold": "progress!",
   "thankYouBackToHome": "Thanks! Back to Home",
-  "startWriting": "Start writing..."
+  "startWriting": "Start writing...",
+  "errorGeneric": "Missing mood type or user",
+  "successMoodCreated": "Mood created successfully"
 }

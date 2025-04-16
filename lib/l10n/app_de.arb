@@ -53,5 +53,7 @@
   "moodSavedPart1": "Super! Deine Stimmung ist gespeichert.\nBleib dran, du machst ",
   "moodSavedBold": "Fortschritte!",
   "thankYouBackToHome": "Danke! Zurück zu Home",
-  "startWriting": "Fang an zu schreiben..."
+  "startWriting": "Fang an zu schreiben...",
+  "errorGeneric": "Stimmungstyp oder Benutzer fehlt",
+  "successMoodCreated": "Stimmung erfolgreich erstellt"
 }

@@ -15,8 +15,6 @@ class MoodWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(onTap: onTap,
       child: Container(
-        height: 64,
-        width: 64,
         padding: const EdgeInsets.all(12.0),
         decoration: BoxDecoration(
           color: mood.getMoodColor(),

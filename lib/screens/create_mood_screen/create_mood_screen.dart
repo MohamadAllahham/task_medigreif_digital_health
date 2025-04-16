@@ -108,47 +108,44 @@ class CreateMoodScreen extends ConsumerWidget {
                   ),
                 ),
                 IconTitleWidget(
-                    iconData: Icons.arrow_forward_outlined,
-                    title: selectedIndex == steps.length - 1
-                        ? localizations.complete
-                        : localizations.next,
-                    titleFirst: true,
-                    onTap: () async {
-                      if (selectedIndex < steps.length - 1) {
-                        ref.read(stepIndex.notifier).state++;
-                        return;
-                      }
+                  iconData: Icons.arrow_forward_outlined,
+                  title: selectedIndex == steps.length - 1
+                      ? localizations.complete
+                      : localizations.next,
+                  titleFirst: true,
+                  onTap: () async {
+                    if (selectedIndex < steps.length - 1) {
+                      ref.read(stepIndex.notifier).state++;
+                      return;
+                    }
 
-                      final moodType = ref.read(moodTypeProvider);
-                      final user = ref.read(userProvider).user;
-                      final contextMounted = context;
+                    final moodType = ref.read(moodTypeProvider);
+                    final user = ref.read(userProvider).user;
 
-                      if (moodType == null || user == null) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text("Missing mood type or user")),
-                        );
-                        return;
-                      }
+                    if (moodType == null || user == null) {
+                      _showSnackBar(context, localizations.errorGeneric);
+                      return;
+                    }
 
-                      final body = CreateMoodRequestBody(
-                        moodType: moodType.name,
-                        userId: user.id.toString(),
-                        note: ref.read(noteControllerProvider).text,
-                      );
+                    final body = CreateMoodRequestBody(
+                      moodType: moodType.name,
+                      userId: user.id.toString(),
+                      note: ref.read(noteControllerProvider).text,
+                    );
 
-                      await ref.read(moodProvider.notifier).createMood(body);
-                      final error = ref.read(moodProvider).errorMessage;
+                    await ref.read(moodProvider.notifier).createMood(body);
 
-                      if (!contextMounted.mounted) return;
+                    final error = ref.read(moodProvider).errorMessage;
+                    if (!context.mounted) return;
 
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(error ?? "Mood created successfully"),
-                        ),
-                      );
+                    _showSnackBar(
+                      context,
+                      error ?? localizations.successMoodCreated,
+                    );
 
-                      if (error == null) contextMounted.push('/mood-created');
-                    }),
+                    if (error == null) context.push('/mood-created');
+                  },
+                ),
               ],
             ),
           ),
@@ -161,6 +158,12 @@ class CreateMoodScreen extends ConsumerWidget {
             ),
           ),
       ],
+    );
+  }
+
+  void _showSnackBar(BuildContext context, String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message)),
     );
   }
 }

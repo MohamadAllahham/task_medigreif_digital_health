@@ -18,6 +18,27 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   bool _isPasswordHidden = true;
 
   @override
+  void initState() {
+    super.initState();
+    _usernameController.addListener(_clearErrorMessage);
+    _passwordController.addListener(_clearErrorMessage);
+  }
+
+  void _clearErrorMessage() {
+    final errorMessage = ref.read(userProvider).errorMessage;
+    if (errorMessage != null) {
+      ref.read(userProvider.notifier).clearError();
+    }
+  }
+
+  @override
+  void dispose() {
+    _usernameController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final userState = ref.watch(userProvider);
     final isLoading = userState.isLoading;
@@ -94,13 +115,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     );
   }
 
-  // Handle login
   Future<void> _handleLogin() async {
     if (!_formKey.currentState!.validate()) return;
 
     final loginBody = LoginBodyRequest(
-      username: _usernameController.text,
-      password: _passwordController.text,
+      username: _usernameController.text.trim(),
+      password: _passwordController.text.trim(),
     );
 
     await ref.read(userProvider.notifier).login(loginBody);

@@ -1,8 +1,9 @@
 class ErrorException implements Exception {
   final String message;
+  final int? statusCode;
 
-  ErrorException(this.message);
+  ErrorException(this.message, {this.statusCode});
 
   @override
-  String toString() => "Error: $message";
+  String toString() => 'ErrorException(message: $message, statusCode: $statusCode)';
 }

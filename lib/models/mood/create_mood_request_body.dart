@@ -6,12 +6,12 @@ part '../../generated/models/mood/create_mood_request_body.g.dart';
 class CreateMoodRequestBody {
   final String userId;
   final String moodType;
-  final String note;
+  final String? note;
 
   const CreateMoodRequestBody({
     required this.userId,
     required this.moodType,
-    this.note = '',
+    this.note,
   });
 
   factory CreateMoodRequestBody.fromJson(Map<String, dynamic> json) =>
